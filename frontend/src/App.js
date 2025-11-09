@@ -336,83 +336,7 @@ function AIAgent() {
     </div>
   );
 }
-
-// Finance Calculator Screen
-function FinanceCalculator() {
-  const [plan, setPlan] = useState('Standard');
-  const [price, setPrice] = useState('');
-  const [down, setDown] = useState('');
-  const [months, setMonths] = useState('');
-  const [monthly, setMonthly] = useState(null);
-
-  const calculatePayment = () => {
-    if (!price || !down || !months) return;
-    const interestRate = plan === 'Special' ? 0.03 : plan === 'Lease' ? 0.02 : 0.04; // simulated interest rates
-    const principal = price - down;
-    const monthlyRate = interestRate / 12;
-    const result =
-      (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months));
-    setMonthly(result.toFixed(2));
-  };
-
-  return (
-    <div style={{ padding: '20px' }}>
-      <h2 style={{ color: '#D6001C', marginBottom: 20 }}>Finance Calculator</h2>
-      <select
-        value={plan}
-        onChange={(e) => setPlan(e.target.value)}
-        style={selectStyle}
-      >
-        <option value="Standard">Standard Plan</option>
-        <option value="Special">Special Plan</option>
-        <option value="Lease">Lease Plan</option>
-      </select>
-
-      <input
-        type="number"
-        placeholder="Car Price ($)"
-        value={price}
-        onChange={(e) => setPrice(parseFloat(e.target.value))}
-        style={inputStyle}
-      />
-      <input
-        type="number"
-        placeholder="Down Payment ($)"
-        value={down}
-        onChange={(e) => setDown(parseFloat(e.target.value))}
-        style={inputStyle}
-      />
-      <input
-        type="number"
-        placeholder="Loan Term (months)"
-        value={months}
-        onChange={(e) => setMonths(parseInt(e.target.value))}
-        style={inputStyle}
-      />
-
-      <button style={buttonStyle} onClick={calculatePayment}>
-        Calculate Monthly Installment
-      </button>
-
-      {monthly && (
-        <div
-          style={{
-            marginTop: 20,
-            background: '#f5f5f5',
-            padding: 15,
-            borderRadius: 10,
-            textAlign: 'center',
-          }}
-        >
-          <h3>Estimated Monthly Payment:</h3>
-          <p style={{ fontSize: 22, color: '#D6001C', fontWeight: 'bold' }}>
-            ${monthly}
-          </p>
-        </div>
-      )}
-    </div>
-  );
-}
+import FinanceCalculator from './FinanceCalculator';
 
 // Styles
 const inputStyle = { padding:'10px', margin:'10px 0', width:'80%', borderRadius:8, border:'1px solid #ccc', fontSize:16 };
@@ -441,3 +365,4 @@ function App() {
 }
 
 export default App;
+
