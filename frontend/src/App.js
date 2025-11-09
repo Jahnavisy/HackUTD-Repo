@@ -1,6 +1,28 @@
-import React, { useState } from 'react';
+
 import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import FinanceCalculator from './FinanceCalculator';
+import React, { useState, createContext, useContext } from 'react';
+
+// Create context
+const CartContext = createContext();
+
+// Provider component
+export function CartProvider({ children }) {
+  const [cart, setCart] = useState([]);
+  const addToCart = (car) => setCart((prev) => [...prev, car]);
+  return (
+    <CartContext.Provider value={{ cart, addToCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+// Hook to use cart
+export function useCart() {
+  return useContext(CartContext);
+}
+
+
 
 // Navbar Component
 function Navbar() {
@@ -34,7 +56,10 @@ function Navbar() {
       </Link>
       <Link to="/ai-agent" style={{ color: '#D6001C', fontWeight: 'bold' }}>
         AI Agent
-      </Link>
+        </Link>
+        <Link to="/Cart" style={{ color: '#D6001C', fontWeight: 'bold' }}>
+        Cart
+</Link>
     </nav>
   );
 }
@@ -82,20 +107,20 @@ function Quiz() {
       <h2 style={{ color:'#D6001C', marginBottom:20 }}>Tell us about your preferences</h2>
 
       <div style={{ marginBottom:20 }}>
-  <label style={{ display:'block', marginBottom:5 }}>Monthly Budget: ${form.budget || 200}</label>
+  <label style={{ display:'block', marginBottom:5 }}>Price Range: ${form.budget || 20000}</label>
   <input
     type="range"
     name="budget"
-    min="200"
-    max="1500"
+    min="20000"
+    max="100000"
     step="50"
-    value={form.budget || 200}
+    value={form.budget || 20000}
     onChange={handleChange}
     style={{ width:'100%' }}
   />
   <div style={{ display:'flex', justifyContent:'space-between', fontSize:12 }}>
-    <span>$200</span>
-    <span>$600</span>
+    <span>$20000</span>
+    <span>$100000</span>
   </div>
 </div>
 
@@ -131,13 +156,24 @@ function Quiz() {
         <option>Any</option>
       </select>
 
-      <select name="drive" onChange={handleChange} style={selectStyle}>
-        <option value="">Drive Type</option>
-        <option>Front Wheel Drive (FWD)</option>
-        <option>Rear Wheel Drive (RWD)</option>
-        <option>All Wheel Drive (AWD)</option>
-        <option>Four Wheel Drive (4WD)</option>
+      <select name="color" onChange={handleChange} style={selectStyle}>
+        <option value="">Color Choice</option>
+        <option>Super White</option>
+        <option>Blizzard Pearl</option>
+        <option>Magnetic Gray Metallic</option>
+        <option>Ruby Flare Pearl</option>
+        <option>Midnight Black Metallic</option>
       </select>
+
+      <select name="drive" onChange={handleChange} style={selectStyle}>
+       <option value="">Drive Type</option>
+       <option>Front Wheel Drive (FWD)</option>
+       <option>Rear Wheel Drive (RWD)</option>
+       <option>All Wheel Drive (AWD)</option>
+       <option>Four Wheel Drive (4WD)</option>
+       <option>Two Wheel Drive (2WD)</option>
+     </select>
+
 
       <select name="safety" onChange={handleChange} style={selectStyle}>
         <option value="">Safety Priority</option>
@@ -160,49 +196,49 @@ function Quiz() {
 
 // Recommendations Screen
 function Recommendations() {
-  const navigate = useNavigate();
+ const navigate = useNavigate();
 
-  // Basic car data (cleaner for this screen)
-  const cars = [
-    {
-      id: 1,
-      name: 'Toyota Camry',
-      img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/camry/3T3/1.png',
-      price: '$25k–$30k',
-      monthly: '$350',
-      eco: 'A',
-      details: {
-        seats: 5,
-        primaryUse: 'Daily Commute',
-        material: 'Leather',
-        drive: 'Front Wheel Drive (FWD)',
-        safety: 'Advanced Safety',
-        entertainment: 'Standard Infotainment',
-        horsepower: '203 HP',
-        mpg: '28 city / 39 highway',
-        cargo: '15.1 cu ft',
-      }
-    },
-    {
-      id: 2,
-      name: 'Toyota RAV4',
-      img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/rav4/218/1.png',
-      price: '$28k–$35k',
-      monthly: '$400',
-      eco: 'B',
-      details: {
-        seats: 5,
-        primaryUse: 'Family / Adventure',
-        material: 'Cloth',
-        drive: 'All Wheel Drive (AWD)',
-        safety: 'Premium Safety',
-        entertainment: 'Premium Sound & Display',
-        horsepower: '203 HP',
-        mpg: '27 city / 35 highway',
-        cargo: '37.6 cu ft',
-      }
-    }
-  ];
+
+ // Basic car data (cleaner for this screen)
+ const cars = [
+   {
+     id: 1,
+     name: 'Grand Highlander',
+     img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/camry/3T3/1.png',
+     price: '$41,360',
+     eco: 'A',
+     details: {
+       seats: 7,
+       primaryUse: 'Daily Commute',
+       material: 'Leather',
+       drive: 'Two Wheel Drive (TWD)',
+       safety: 'Advanced Safety',
+       entertainment: 'Standard Infotainment',
+       horsepower: '203 HP',
+       mpg: '28 city / 39 highway',
+       cargo: '15.1 cu ft',
+     }
+   },
+   {
+     id: 2,
+     name: '4Runner',
+     img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/rav4/218/1.png',
+     price: '$41,270',
+     eco: 'B',
+     details: {
+       seats: 7,
+       primaryUse: 'Daily Commute',
+       material: 'Leather',
+       drive: 'Two Wheel Drive (TWD',
+       safety: 'Advanced Safety',
+       entertainment: 'Standard Infotainment',
+       horsepower: '203 HP',
+       mpg: '27 city / 35 highway',
+       cargo: '37.6 cu ft',
+     }
+   }
+ ];
+
 
   return (
     <div style={{ padding: '20px' }}>
@@ -227,10 +263,13 @@ function Recommendations() {
   );
 }
 
+//car details
 function CarDetails() {
   const { id } = useParams();
   const location = useLocation();
   const car = location.state?.car;
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   if (!car) {
     return (
@@ -271,11 +310,28 @@ function CarDetails() {
       </div>
 
       <div style={{ marginTop: 20 }}>
-        <h3>Maintenance Estimate</h3>
-        <p>$500/year</p>
-      </div>
+  <h3>Maintenance Estimate</h3>
+  <p>$500/year</p>
+</div>
 
-      <button style={buttonStyle}>Ask me about this car</button>
+<div style={{ marginTop: 20, display: 'flex', alignItems: 'center' }}>
+  <button
+    style={{ ...smallButtonStyle, marginRight: 10 }}
+    onClick={() => navigate('/ai-agent', { state: { car } })}
+  >
+    Ask me about this car
+  </button>
+
+  <button
+    style={addToCartButtonStyle}
+    onClick={() => {
+      addToCart(car);       // Add car to global cart
+      navigate('/cart'); // Navigate to cart tab
+    }}
+  >
+    Add to Cart
+  </button>
+</div>
     </div>
   );
 }
@@ -338,31 +394,73 @@ function AIAgent() {
   );
 }
 
+
+// check
+function Cart() {
+  const { cart } = useCart();
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h2 style={{ color: '#D6001C', marginBottom: 20 }}>Cart</h2>
+      {cart.length === 0 ? (
+        <p>Your cart is empty.</p>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+          {cart.map((car, idx) => (
+            <div key={idx} style={{ ...cardStyle, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <img src={car.img} alt={car.name} style={{ width: 80, borderRadius: 8 }} />
+              <div>
+                <h3>{car.name}</h3>
+                <p>Price: {car.price}</p>
+              </div>
+            </div>
+          ))}
+          <button style={{ ...buttonStyle, backgroundColor: '#28a745' }}>Proceed to Payment</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 // Styles
 const inputStyle = { padding:'10px', margin:'10px 0', width:'80%', borderRadius:8, border:'1px solid #ccc', fontSize:16 };
 const buttonStyle = { padding:'12px', marginTop:10, width:'85%', borderRadius:12, border:'none', backgroundColor:'#D6001C', color:'#fff', fontSize:16, cursor:'pointer' };
+const smallButtonStyle = { padding: '8px 12px', borderRadius: 8, border: 'none', backgroundColor: '#D6001C', color: '#fff', fontSize: 14, cursor: 'pointer' };
+
+// ✅ New Add to Cart style
+const addToCartButtonStyle = { 
+  ...smallButtonStyle,      // inherit small button base style
+  backgroundColor: '#d6001c' // red
+};
+
 const selectStyle = { display:'block', width:'100%', padding:'10px', margin:'10px 0', borderRadius:8, fontSize:16 };
 const cardStyle = { flex:1, padding:15, borderRadius:12, boxShadow:'0 2px 8px rgba(0,0,0,0.1)', backgroundColor:'#fff' };
+
 
 // Main App
 function App() {
   return (
-    <BrowserRouter>
-      <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#fff', minHeight: '100vh', paddingBottom:60 }}>
-       <Routes>
-  <Route path="/" element={<Login />} />
-  <Route path="/quiz" element={<Quiz />} />
-  <Route path="/recommendations" element={<Recommendations />} />
-  <Route path="/car/:id" element={<CarDetails />} />
-  <Route path="/compare" element={<Compare />} />
-  <Route path="/finance" element={<FinanceCalculator />} />  {/* 👈 Add this line */}
-  <Route path="/ai-agent" element={<AIAgent />} />
-</Routes>
-        <Navbar />
-      </div>
-    </BrowserRouter>
+    <CartProvider>
+      <BrowserRouter>
+        <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#fff', minHeight: '100vh', paddingBottom:60 }}>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/recommendations" element={<Recommendations />} />
+            <Route path="/car/:id" element={<CarDetails />} />
+            <Route path="/compare" element={<Compare />} />
+            <Route path="/finance" element={<FinanceCalculator />} />
+            <Route path="/ai-agent" element={<AIAgent />} />
+            <Route path="/cart" element={<Cart />} />
+          </Routes>
+          <Navbar />
+        </div>
+      </BrowserRouter>
+    </CartProvider>
   );
 }
+
 
 export default App;
 
