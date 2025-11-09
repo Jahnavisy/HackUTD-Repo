@@ -1,6 +1,8 @@
 import React, { useState, createContext, useContext } from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import FinanceCalculator from './FinanceCalculator';
+import bgImage from './assets/Images/toyotalogo2.jpg';
+
 
 
 
@@ -74,22 +76,18 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Authentication logic placeholder
     navigate("/quiz");
   };
 
-  const handleGoogleSignIn = () => {
-    alert("Google Sign-In coming soon!");
-  };
-
-  const handleForgotPassword = () => {
-    alert("Password reset instructions sent to your email.");
-  };
+  const handleGoogleSignIn = () => alert("Google Sign-In coming soon!");
+  const handleForgotPassword = () => alert("Password reset instructions sent!");
 
   return (
     <div
       style={{
-        backgroundColor: "#D6001C",
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center -30%",
         height: "100vh",
         display: "flex",
         justifyContent: "center",
@@ -107,11 +105,9 @@ function Login() {
           textAlign: "center",
         }}
       >
-        {/* Header */}
         <h1 style={{ color: "#D6001C", marginBottom: "10px" }}>TOYOTA</h1>
         <h3 style={{ color: "#555", marginBottom: "25px" }}>Sign In</h3>
 
-        {/* Form */}
         <form onSubmit={handleLogin}>
           <input
             type="email"
@@ -134,27 +130,14 @@ function Login() {
           </button>
         </form>
 
-        {/* Forgot Password */}
         <p
           onClick={handleForgotPassword}
-          style={{
-            color: "#D6001C",
-            cursor: "pointer",
-            fontSize: "14px",
-            marginTop: "10px",
-          }}
+          style={{ color: "#D6001C", cursor: "pointer", fontSize: "14px", marginTop: "10px" }}
         >
           Forgot Password?
         </p>
 
-        {/* Divider */}
-        <div
-          style={{
-            margin: "20px 0",
-            borderTop: "1px solid #ddd",
-            position: "relative",
-          }}
-        >
+        <div style={{ margin: "20px 0", borderTop: "1px solid #ddd", position: "relative" }}>
           <span
             style={{
               backgroundColor: "white",
@@ -171,7 +154,6 @@ function Login() {
           </span>
         </div>
 
-        {/* Google Sign-In */}
         <button onClick={handleGoogleSignIn} style={googleButtonStyle}>
           🔴 Sign in with Google
         </button>
@@ -179,6 +161,7 @@ function Login() {
     </div>
   );
 }
+
 
 // ✅ Unique style variables to avoid conflicts
 const loginInputStyle = {
@@ -368,7 +351,7 @@ function Recommendations() {
        seats: 7,
        primaryUse: 'Daily Commute',
        material: 'Leather',
-       drive: 'Two Wheel Drive (TWD)',
+       drive: 'Two Wheel Drive (TWD',
        safety: 'Advanced Safety',
        entertainment: 'Standard Infotainment',
        horsepower: '203 HP',
