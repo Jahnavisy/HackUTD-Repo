@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, useLocation } from 'react-router-dom';
+import FinanceCalculator from './FinanceCalculator';
 
 // Navbar Component
 function Navbar() {
@@ -336,7 +337,6 @@ function AIAgent() {
     </div>
   );
 }
-import FinanceCalculator from './FinanceCalculator';
 
 // Styles
 const inputStyle = { padding:'10px', margin:'10px 0', width:'80%', borderRadius:8, border:'1px solid #ccc', fontSize:16 };
