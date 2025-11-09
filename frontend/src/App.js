@@ -1,7 +1,13 @@
 import React, { useState, createContext, useContext } from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import FinanceCalculator from './FinanceCalculator';
-import bgImage from './assets/Images/toyotalogo2.jpg';
+import Depreciation from './depreciation';
+import bgImage from './assets/Images/toyblur.jpeg';
+import logo4toy from './assets/Images/logo4toy.jpg';
+import highlander from './assets/Images/highlander.webp';
+import fRunner from './assets/Images/4runner.png';
+import sienna from './assets/Images/sienna.webp'
+import blacklogo from './assets/Images/black logo.jpg'
 
 
 
@@ -41,7 +47,7 @@ function Navbar() {
         display: 'flex',
         justifyContent: 'space-around',
         padding: '10px 0',
-        backgroundColor: '#fff',
+        backgroundColor: '#ece7e7ff',
         boxShadow: '0 -2px 6px rgba(0,0,0,0.1)',
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,
@@ -105,7 +111,7 @@ function Login() {
           textAlign: "center",
         }}
       >
-        <h1 style={{ color: "#D6001C", marginBottom: "10px" }}>TOYOTA</h1>
+        <h1 style={{ color: "#D6001C", marginBottom: "10px" }}>MY TOYOTA WAY</h1>
         <h3 style={{ color: "#555", marginBottom: "25px" }}>Sign In</h3>
 
         <form onSubmit={handleLogin}>
@@ -220,32 +226,73 @@ function Quiz() {
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = () => {
-    console.log('User Preferences:', form); // optional: see selections in console
+    console.log('User Preferences:', form);
     navigate('/recommendations');
   };
 
+  const selectStyle = {
+    display: 'block',
+    width: '100%',
+    marginBottom: 15,
+    padding: 10,
+    borderRadius: 5,
+    border: '1px solid #ccc',
+    backgroundColor: '#333', // darker select background
+    color: 'white' // white text for selects
+  };
+
+  const buttonStyle = {
+    backgroundColor: '#D6001C',
+    color: 'white',
+    border: 'none',
+    padding: '10px 20px',
+    borderRadius: 5,
+    cursor: 'pointer',
+    marginTop: 20,
+  };
+
   return (
-    <div style={{ padding:'20px' }}>
-      <h2 style={{ color:'#D6001C', marginBottom:20 }}>Tell us about your preferences</h2>
+    <div style={{ 
+      padding: '20px', 
+      position: 'relative', 
+      minHeight: '100vh', 
+      backgroundColor: 'black', // changed background to black
+      color: 'white' // default text color white
+    }}>
+      {/* ✅ Toyota Logo (top-right corner) */}
+      <img
+        src={blacklogo}
+        alt="Toyota Logo"
+        style={{
+          position: 'absolute',
+          top: 10,
+          right: 10,
+          width: 80,
+          height: 'auto',
+        }}
+      />
 
-      <div style={{ marginBottom:20 }}>
-  <label style={{ display:'block', marginBottom:5 }}>Price Range: ${form.budget || 10000}</label>
-  <input
-    type="range"
-    name="budget"
-    min="10000"
-    max="100000"
-    step="50"
-    value={form.budget || 10000}
-    onChange={handleChange}
-    style={{ width:'100%' }}
-  />
-  <div style={{ display:'flex', justifyContent:'space-between', fontSize:12 }}>
-    <span>$10000</span>
-    <span>$100000</span>
-  </div>
-</div>
+      <h2 style={{ color: '#D6001C', marginBottom: 20 }}>Tell us about your preferences</h2>
 
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ display: 'block', marginBottom: 5 }}>
+          Price Range: ${form.budget || 10000}
+        </label>
+        <input
+          type="range"
+          name="budget"
+          min="10000"
+          max="100000"
+          step="50"
+          value={form.budget || 10000}
+          onChange={handleChange}
+          style={{ width: '100%' }}
+        />
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+          <span>$10000</span>
+          <span>$100000</span>
+        </div>
+      </div>
 
       <select name="seats" onChange={handleChange} style={selectStyle}>
         <option value="">Seating Capacity</option>
@@ -257,7 +304,7 @@ function Quiz() {
 
       <select name="fuel" onChange={handleChange} style={selectStyle}>
         <option value="">Fuel Type</option>
-        <option>Petrol</option>
+        <option>Gas</option>
         <option>Hybrid</option>
         <option>Electric</option>
       </select>
@@ -288,14 +335,13 @@ function Quiz() {
       </select>
 
       <select name="drive" onChange={handleChange} style={selectStyle}>
-       <option value="">Drive Type</option>
-       <option>Front Wheel Drive (FWD)</option>
-       <option>Rear Wheel Drive (RWD)</option>
-       <option>All Wheel Drive (AWD)</option>
-       <option>Four Wheel Drive (4WD)</option>
-       <option>Two Wheel Drive (2WD)</option>
-     </select>
-
+        <option value="">Drive Type</option>
+        <option>Front Wheel Drive (FWD)</option>
+        <option>Rear Wheel Drive (RWD)</option>
+        <option>All Wheel Drive (AWD)</option>
+        <option>Four Wheel Drive (4WD)</option>
+        <option>Two Wheel Drive (2WD)</option>
+      </select>
 
       <select name="safety" onChange={handleChange} style={selectStyle}>
         <option value="">Safety Priority</option>
@@ -311,97 +357,119 @@ function Quiz() {
         <option>Premium Sound & Display</option>
       </select>
 
-      <button style={buttonStyle} onClick={handleSubmit}>Generate Recommendations</button>
+      <button style={buttonStyle} onClick={handleSubmit}>
+        Generate Recommendations
+      </button>
     </div>
   );
 }
 
 // Recommendations Screen
 function Recommendations() {
- const navigate = useNavigate();
+  const navigate = useNavigate();
 
+  // Basic car data
+  const cars = [
+    
+  {
+    id: 1,
+    name: 'Grand Highlander',
+    img: highlander,  // use imported local image
+    price: '$41,360',
+    eco: 'A',
+    details: {
+      seats: 7,
+      primaryUse: 'Daily Commute',
+      material: 'Leather',
+      drive: 'Two Wheel Drive (TWD)',
+      safety: 'Advanced Safety',
+      entertainment: 'Standard Infotainment',
+      horsepower: '203 HP',
+      mpg: '28 city / 39 highway',
+      cargo: '15.1 cu ft',
+    },
+  },
 
- // Basic car data (cleaner for this screen)
- const cars = [
-   {
-     id: 1,
-     name: 'Grand Highlander',
-     img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/camry/3T3/1.png',
-     price: '$41,360',
-     eco: 'A',
-     details: {
-       seats: 7,
-       primaryUse: 'Daily Commute',
-       material: 'Leather',
-       drive: 'Two Wheel Drive (TWD)',
-       safety: 'Advanced Safety',
-       entertainment: 'Standard Infotainment',
-       horsepower: '203 HP',
-       mpg: '28 city / 39 highway',
-       cargo: '15.1 cu ft',
-     }
-   },
-   {
-     id: 2,
-     name: '4Runner',
-     img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/rav4/218/1.png',
-     price: '$41,270',
-     eco: 'B',
-     details: {
-       seats: 7,
-       primaryUse: 'Daily Commute',
-       material: 'Leather',
-       drive: 'Two Wheel Drive (TWD',
-       safety: 'Advanced Safety',
-       entertainment: 'Standard Infotainment',
-       horsepower: '203 HP',
-       mpg: '27 city / 35 highway',
-       cargo: '37.6 cu ft',
-     }
-   },
-   { id: 3,
-     name: 'Sienna',
-     img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/rav4/218/1.png',
-     price: '$40,120',
-     eco: 'B',
-     details: {
-       seats: 7,
-       primaryUse: 'Daily Commute',
-       material: 'Leather',
-       drive: 'Two Wheel Drive (TWD)',
-       safety: 'Advanced Safety',
-       entertainment: 'Standard Infotainment',
-       horsepower: '245 HP',
-       mpg: '34 city / 36 highway',
-       cargo: '33.5 cu ft',
-   }
-  }
- ];
+      
+   
+    {
+      id: 2,
+      name: '4Runner',
+      img: fRunner,
+      price: '$41,270',
+      eco: 'B',
+      details: {
+        seats: 7,
+        primaryUse: 'Daily Commute',
+        material: 'Leather',
+        drive: 'Two Wheel Drive (TWD)',
+        safety: 'Advanced Safety',
+        entertainment: 'Standard Infotainment',
+        horsepower: '203 HP',
+        mpg: '27 city / 35 highway',
+        cargo: '37.6 cu ft',
+      },
+    },
+    {
+      id: 3,
+      name: 'Sienna',
+      img: sienna,
+      price: '$40,120',
+      eco: 'B',
+      details: {
+        seats: 7,
+        primaryUse: 'Daily Commute',
+        material: 'Leather',
+        drive: 'Two Wheel Drive (TWD)',
+        safety: 'Advanced Safety',
+        entertainment: 'Standard Infotainment',
+        horsepower: '245 HP',
+        mpg: '34 city / 36 highway',
+        cargo: '33.5 cu ft',
+      },
+    },
+  ];
 
+  const cardStyle = {
+    borderRadius: 12,
+    background: '#f9f9f9',
+    padding: '10px',
+    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+  };
 
-   return (
-    <div style={{ padding: "20px" }}>
-      <h2 style={{ color: "#D6001C", marginBottom: 20 }}>Recommended Vehicles</h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+  return (
+    <div style={{ padding: '20px', position: 'relative', minHeight: '100vh' }}>
+      {/* Toyota logo in top-right corner */}
+      <img
+        src={logo4toy}
+        alt="Toyota Logo"
+        style={{
+          position: 'absolute',
+          top: 10,
+          right: 10,
+          width: 80,
+          height: 'auto',
+          zIndex: 1000,
+        }}
+      />
+
+      <h2 style={{ color: '#D6001C', marginBottom: 20 }}>Recommended Vehicles</h2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {cars.map((car) => (
           <div
             key={car.id}
             style={{
               ...cardStyle,
-              border: "2px solid black", // Outline in black
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "15px",
-              cursor: "pointer",
+              border: '2px solid black',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-              <img
-                src={car.img}
-                alt={car.name}
-                style={{ width: "120px", borderRadius: 12 }}
-              />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+              <img src={car.img} alt={car.name} style={{ width: '120px', borderRadius: 12 }} />
               <div>
                 <h3>{car.name}</h3>
                 <p>Price: {car.price}</p>
@@ -411,11 +479,11 @@ function Recommendations() {
             <button
               onClick={() => navigate(`/car/${car.id}`, { state: { car } })}
               style={{
-                background: "none",
-                border: "none",
-                fontSize: "24px",
-                cursor: "pointer",
-                color: "#D6001C",
+                background: 'none',
+                border: 'none',
+                fontSize: '24px',
+                cursor: 'pointer',
+                color: '#D6001C',
               }}
             >
               ➡️
@@ -468,10 +536,10 @@ function CarDetails() {
         <li><strong>Cargo Space:</strong> {details.cargo}</li>
       </ul>
 
-      <div style={{ marginTop: 20 }}>
+        <div style={{ marginTop: 20 }}>
         <h3>Depreciation Graph</h3>
-        <div style={{ width: '100%', height: 150, background: '#eee', borderRadius: 12 }}></div>
-      </div>
+        <Depreciation />
+        </div>
 
       <div style={{ marginTop: 20 }}>
   <h3>Maintenance Estimate</h3>
@@ -510,7 +578,7 @@ function Compare() {
     {
       id: 1,
       name: 'Grand Highlander',
-      img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/camry/3T3/1.png',
+      img: highlander,
       price: '$41,360',
       eco: 'A',
       details: {
@@ -528,7 +596,7 @@ function Compare() {
     {
       id: 2,
       name: '4Runner',
-      img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/rav4/218/1.png',
+      img: fRunner,
       price: '$41,270',
       eco: 'B',
       details: {
@@ -545,9 +613,31 @@ function Compare() {
     }
   ];
 
+  const cardStyle = {
+    borderRadius: 12,
+    background: '#f9f9f9',
+    padding: '10px',
+    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+  };
+
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '20px', position: 'relative', minHeight: '100vh' }}>
+      {/* Toyota logo in top-right corner */}
+      <img
+        src={logo4toy}
+        alt="Toyota Logo"
+        style={{
+          position: 'absolute',
+          top: 10,
+          right: 10,
+          width: 80,
+          height: 'auto',
+          zIndex: 1000,
+        }}
+      />
+
       <h2 style={{ color: '#D6001C', marginBottom: 20 }}>Compare Vehicles</h2>
+
       <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
         {cars.map((car) => (
           <div
@@ -599,35 +689,89 @@ function Compare() {
 }
 
 
-// AI Agent Screen
 function AIAgent() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
   const sendMessage = () => {
     if (!input) return;
-    setMessages([...messages, { text: input, from:'user' }, { text:'Placeholder AI response', from:'ai' }]);
+    setMessages([
+      ...messages,
+      { text: input, from: 'user' },
+      { text: 'Hi my name is Peter! How can I help you today?', from: 'ai' }
+    ]);
     setInput('');
   };
 
   return (
-    <div style={{ padding:'20px' }}>
-      <h2 style={{ color:'#D6001C' }}>AI Voice Agent</h2>
-      <div style={{ maxHeight:400, overflowY:'scroll', marginBottom:20, display:'flex', flexDirection:'column' }}>
+    <div style={{ padding: '20px', position: 'relative', minHeight: '100vh' }}>
+      {/* Toyota logo in top-right corner */}
+      <img
+        src={logo4toy}
+        alt="Toyota Logo"
+        style={{
+          position: 'absolute',
+          top: 10,
+          right: 10,
+          width: 80,
+          height: 'auto',
+          zIndex: 1000,
+        }}
+      />
+
+      <h2 style={{ color: '#D6001C', marginBottom: 20 }}>AI Voice Agent</h2>
+
+      <div
+        style={{
+          maxHeight: 400,
+          overflowY: 'scroll',
+          marginBottom: 20,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         {messages.map((msg, idx) => (
-          <div key={idx} style={{
-            alignSelf: msg.from==='user' ? 'flex-end' : 'flex-start',
-            backgroundColor: msg.from==='user' ? '#D6001C' : '#eee',
-            color: msg.from==='user' ? '#fff' : '#000',
-            padding:'10px', borderRadius:12, margin:'5px 0', maxWidth:'70%'
-          }}>
+          <div
+            key={idx}
+            style={{
+              alignSelf: msg.from === 'user' ? 'flex-end' : 'flex-start',
+              backgroundColor: msg.from === 'user' ? '#D6001C' : '#eee',
+              color: msg.from === 'user' ? '#fff' : '#000',
+              padding: '10px',
+              borderRadius: 12,
+              margin: '5px 0',
+              maxWidth: '70%',
+            }}
+          >
             {msg.text}
           </div>
         ))}
       </div>
-      <div style={{ display:'flex', gap:10 }}>
-        <input value={input} onChange={e=>setInput(e.target.value)} placeholder="Ask me something..." style={{ flex:1, padding:10, borderRadius:8, border:'1px solid #ccc' }} />
-        <button onClick={sendMessage} style={{ padding:'10px 15px', borderRadius:8, backgroundColor:'#D6001C', color:'#fff', border:'none' }}>Send</button>
+
+      <div style={{ display: 'flex', gap: 10 }}>
+        <input
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          placeholder="Ask me something..."
+          style={{
+            flex: 1,
+            padding: 10,
+            borderRadius: 8,
+            border: '1px solid #ccc',
+          }}
+        />
+        <button
+          onClick={sendMessage}
+          style={{
+            padding: '10px 15px',
+            borderRadius: 8,
+            backgroundColor: '#D6001C',
+            color: '#fff',
+            border: 'none',
+          }}
+        >
+          Send
+        </button>
       </div>
     </div>
   );
