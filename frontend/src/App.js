@@ -4,25 +4,36 @@ import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, useLocation
 // Navbar Component
 function Navbar() {
   const location = useLocation();
-  const hiddenPaths = ['/', '/quiz', '/car/:id', '/ai-agent'];
   if (['/', '/quiz', '/ai-agent'].includes(location.pathname)) return null;
 
   return (
-    <nav style={{
-      position: 'fixed',
-      bottom: 0,
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-around',
-      padding: '10px 0',
-      backgroundColor: '#fff',
-      boxShadow: '0 -2px 6px rgba(0,0,0,0.1)',
-      borderTopLeftRadius: 12,
-      borderTopRightRadius: 12
-    }}>
-      <Link to="/recommendations" style={{ color: '#D6001C', fontWeight: 'bold' }}>Home</Link>
-      <Link to="/compare" style={{ color: '#D6001C', fontWeight: 'bold' }}>Compare</Link>
-      <Link to="/ai-agent" style={{ color: '#D6001C', fontWeight: 'bold' }}>AI Agent</Link>
+    <nav
+      style={{
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-around',
+        padding: '10px 0',
+        backgroundColor: '#fff',
+        boxShadow: '0 -2px 6px rgba(0,0,0,0.1)',
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        zIndex: 1000,
+      }}
+    >
+      <Link to="/recommendations" style={{ color: '#D6001C', fontWeight: 'bold' }}>
+        Home
+      </Link>
+      <Link to="/compare" style={{ color: '#D6001C', fontWeight: 'bold' }}>
+        Compare
+      </Link>
+      <Link to="/finance" style={{ color: '#D6001C', fontWeight: 'bold' }}>
+        Finance
+      </Link>
+      <Link to="/ai-agent" style={{ color: '#D6001C', fontWeight: 'bold' }}>
+        AI Agent
+      </Link>
     </nav>
   );
 }
@@ -150,36 +161,46 @@ function Quiz() {
 function Recommendations() {
   const navigate = useNavigate();
 
-  // Sample data for demonstration; ideally this comes from user preferences or API
+  // Basic car data (cleaner for this screen)
   const cars = [
     {
       id: 1,
       name: 'Toyota Camry',
-      img: 'https://toyota.com/camry.jpg',
-      price: '$25k-$30k',
+      img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/camry/3T3/1.png',
+      price: '$25k–$30k',
       monthly: '$350',
       eco: 'A',
-      seats: 5,
-      primaryUse: 'Daily Commute',
-      material: 'Leather',
-      drive: 'FWD',
-      safety: 'Advanced Safety',
-      entertainment: 'Standard Infotainment'
+      details: {
+        seats: 5,
+        primaryUse: 'Daily Commute',
+        material: 'Leather',
+        drive: 'Front Wheel Drive (FWD)',
+        safety: 'Advanced Safety',
+        entertainment: 'Standard Infotainment',
+        horsepower: '203 HP',
+        mpg: '28 city / 39 highway',
+        cargo: '15.1 cu ft',
+      }
     },
     {
       id: 2,
       name: 'Toyota RAV4',
-      img: 'https://toyota.com/rav4.jpg',
-      price: '$28k-$35k',
+      img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/rav4/218/1.png',
+      price: '$28k–$35k',
       monthly: '$400',
       eco: 'B',
-      seats: 5,
-      primaryUse: 'Family',
-      material: 'Cloth',
-      drive: 'AWD',
-      safety: 'Premium Safety',
-      entertainment: 'Premium Sound & Display'
-    },
+      details: {
+        seats: 5,
+        primaryUse: 'Family / Adventure',
+        material: 'Cloth',
+        drive: 'All Wheel Drive (AWD)',
+        safety: 'Premium Safety',
+        entertainment: 'Premium Sound & Display',
+        horsepower: '203 HP',
+        mpg: '27 city / 35 highway',
+        cargo: '37.6 cu ft',
+      }
+    }
   ];
 
   return (
@@ -189,27 +210,14 @@ function Recommendations() {
         {cars.map((car) => (
           <div
             key={car.id}
-            style={cardStyle}
+            style={{ ...cardStyle, cursor: 'pointer' }}
             onClick={() => navigate(`/car/${car.id}`, { state: { car } })}
           >
-            <img
-              src={car.img}
-              alt={car.name}
-              style={{ width: '100%', borderRadius: 12 }}
-            />
+            <img src={car.img} alt={car.name} style={{ width: '100%', borderRadius: 12 }} />
             <h3>{car.name}</h3>
             <p>Price: {car.price}</p>
             <p>Monthly Estimate: {car.monthly}</p>
             <p>Eco Score: {car.eco}</p>
-            <h4>Key Specs:</h4>
-            <ul>
-              <li>Seats: {car.seats}</li>
-              <li>Primary Use: {car.primaryUse}</li>
-              <li>Seat Material: {car.material}</li>
-              <li>Drive Type: {car.drive}</li>
-              <li>Safety Priority: {car.safety}</li>
-              <li>Entertainment Features: {car.entertainment}</li>
-            </ul>
             <p style={{ color: '#D6001C', fontWeight: 'bold' }}>Click for more details</p>
           </div>
         ))}
@@ -218,40 +226,58 @@ function Recommendations() {
   );
 }
 
-// Car Details Screen
 function CarDetails() {
   const { id } = useParams();
+  const location = useLocation();
+  const car = location.state?.car;
+
+  if (!car) {
+    return (
+      <div style={{ padding: '20px' }}>
+        <h2 style={{ color: '#D6001C' }}>Car not found</h2>
+        <p>Go back to recommendations.</p>
+      </div>
+    );
+  }
+
+  const details = car.details;
+
   return (
-    <div style={{ padding:'20px' }}>
-      <h2 style={{ color:'#D6001C' }}>Toyota Car {id}</h2>
-      <img src={`https://toyota.com/car${id}.jpg`} alt="Car" style={{ width:'100%', borderRadius:12 }} />
-      <h3>Key Specs</h3>
+    <div style={{ padding: '20px' }}>
+      <h2 style={{ color: '#D6001C' }}>{car.name}</h2>
+      <img
+        src={car.img}
+        alt={car.name}
+        style={{ width: '100%', borderRadius: 12, marginBottom: 20 }}
+      />
+
+      <h3>Key Specifications</h3>
       <ul>
-        <li>Horsepower: 203 HP</li>
-        <li>MPG: 28 city / 39 highway</li>
-        <li>Seating: 5</li>
-        <li>Drivetrain: FWD</li>
-        <li>Cargo Space: 15.1 cu ft</li>
+        <li><strong>Seats:</strong> {details.seats}</li>
+        <li><strong>Primary Use:</strong> {details.primaryUse}</li>
+        <li><strong>Seat Material:</strong> {details.material}</li>
+        <li><strong>Drive Type:</strong> {details.drive}</li>
+        <li><strong>Safety Priority:</strong> {details.safety}</li>
+        <li><strong>Entertainment Features:</strong> {details.entertainment}</li>
+        <li><strong>Horsepower:</strong> {details.horsepower}</li>
+        <li><strong>MPG:</strong> {details.mpg}</li>
+        <li><strong>Cargo Space:</strong> {details.cargo}</li>
       </ul>
-      <div style={{ marginTop:20 }}>
-        <h3>Finance Calculator</h3>
-        <input type="number" placeholder="Down Payment $" style={inputStyle} />
-        <input type="number" placeholder="Loan Term (months)" style={inputStyle} />
-        <button style={buttonStyle}>Calculate</button>
-      </div>
-      <div style={{ marginTop:20 }}>
+
+      <div style={{ marginTop: 20 }}>
         <h3>Depreciation Graph</h3>
-        <div style={{ width:'100%', height:150, background:'#eee', borderRadius:12 }}></div>
+        <div style={{ width: '100%', height: 150, background: '#eee', borderRadius: 12 }}></div>
       </div>
-      <div style={{ marginTop:20 }}>
+
+      <div style={{ marginTop: 20 }}>
         <h3>Maintenance Estimate</h3>
         <p>$500/year</p>
       </div>
+
       <button style={buttonStyle}>Ask me about this car</button>
     </div>
   );
 }
-
 // Compare Screen
 function Compare() {
   return (
@@ -311,6 +337,83 @@ function AIAgent() {
   );
 }
 
+// Finance Calculator Screen
+function FinanceCalculator() {
+  const [plan, setPlan] = useState('Standard');
+  const [price, setPrice] = useState('');
+  const [down, setDown] = useState('');
+  const [months, setMonths] = useState('');
+  const [monthly, setMonthly] = useState(null);
+
+  const calculatePayment = () => {
+    if (!price || !down || !months) return;
+    const interestRate = plan === 'Special' ? 0.03 : plan === 'Lease' ? 0.02 : 0.04; // simulated interest rates
+    const principal = price - down;
+    const monthlyRate = interestRate / 12;
+    const result =
+      (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months));
+    setMonthly(result.toFixed(2));
+  };
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h2 style={{ color: '#D6001C', marginBottom: 20 }}>Finance Calculator</h2>
+      <select
+        value={plan}
+        onChange={(e) => setPlan(e.target.value)}
+        style={selectStyle}
+      >
+        <option value="Standard">Standard Plan</option>
+        <option value="Special">Special Plan</option>
+        <option value="Lease">Lease Plan</option>
+      </select>
+
+      <input
+        type="number"
+        placeholder="Car Price ($)"
+        value={price}
+        onChange={(e) => setPrice(parseFloat(e.target.value))}
+        style={inputStyle}
+      />
+      <input
+        type="number"
+        placeholder="Down Payment ($)"
+        value={down}
+        onChange={(e) => setDown(parseFloat(e.target.value))}
+        style={inputStyle}
+      />
+      <input
+        type="number"
+        placeholder="Loan Term (months)"
+        value={months}
+        onChange={(e) => setMonths(parseInt(e.target.value))}
+        style={inputStyle}
+      />
+
+      <button style={buttonStyle} onClick={calculatePayment}>
+        Calculate Monthly Installment
+      </button>
+
+      {monthly && (
+        <div
+          style={{
+            marginTop: 20,
+            background: '#f5f5f5',
+            padding: 15,
+            borderRadius: 10,
+            textAlign: 'center',
+          }}
+        >
+          <h3>Estimated Monthly Payment:</h3>
+          <p style={{ fontSize: 22, color: '#D6001C', fontWeight: 'bold' }}>
+            ${monthly}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Styles
 const inputStyle = { padding:'10px', margin:'10px 0', width:'80%', borderRadius:8, border:'1px solid #ccc', fontSize:16 };
 const buttonStyle = { padding:'12px', marginTop:10, width:'85%', borderRadius:12, border:'none', backgroundColor:'#D6001C', color:'#fff', fontSize:16, cursor:'pointer' };
@@ -322,14 +425,15 @@ function App() {
   return (
     <BrowserRouter>
       <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#fff', minHeight: '100vh', paddingBottom:60 }}>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/recommendations" element={<Recommendations />} />
-          <Route path="/car/:id" element={<CarDetails />} />
-          <Route path="/compare" element={<Compare />} />
-          <Route path="/ai-agent" element={<AIAgent />} />
-        </Routes>
+       <Routes>
+  <Route path="/" element={<Login />} />
+  <Route path="/quiz" element={<Quiz />} />
+  <Route path="/recommendations" element={<Recommendations />} />
+  <Route path="/car/:id" element={<CarDetails />} />
+  <Route path="/compare" element={<Compare />} />
+  <Route path="/finance" element={<FinanceCalculator />} />  {/* 👈 Add this line */}
+  <Route path="/ai-agent" element={<AIAgent />} />
+</Routes>
         <Navbar />
       </div>
     </BrowserRouter>
