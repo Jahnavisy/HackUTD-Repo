@@ -28,7 +28,7 @@ export function useCart() {
 // Navbar Component
 function Navbar() {
   const location = useLocation();
-  if (['/', '/quiz', '/ai-agent'].includes(location.pathname)) return null;
+  if (['/', '/quiz'].includes(location.pathname)) return null;
 
   return (
     <nav
@@ -246,19 +246,19 @@ function Quiz() {
       <h2 style={{ color:'#D6001C', marginBottom:20 }}>Tell us about your preferences</h2>
 
       <div style={{ marginBottom:20 }}>
-  <label style={{ display:'block', marginBottom:5 }}>Price Range: ${form.budget || 20000}</label>
+  <label style={{ display:'block', marginBottom:5 }}>Price Range: ${form.budget || 10000}</label>
   <input
     type="range"
     name="budget"
-    min="20000"
+    min="10000"
     max="100000"
     step="50"
-    value={form.budget || 20000}
+    value={form.budget || 10000}
     onChange={handleChange}
     style={{ width:'100%' }}
   />
   <div style={{ display:'flex', justifyContent:'space-between', fontSize:12 }}>
-    <span>$20000</span>
+    <span>$10000</span>
     <span>$100000</span>
   </div>
 </div>
@@ -368,14 +368,31 @@ function Recommendations() {
        seats: 7,
        primaryUse: 'Daily Commute',
        material: 'Leather',
-       drive: 'Two Wheel Drive (TWD',
+       drive: 'Two Wheel Drive (TWD)',
        safety: 'Advanced Safety',
        entertainment: 'Standard Infotainment',
        horsepower: '203 HP',
        mpg: '27 city / 35 highway',
        cargo: '37.6 cu ft',
      }
+   },
+   { id: 3,
+     name: 'Sienna',
+     img: 'https://www.toyota.com/imgix/responsive/images/mlp/colorizer/2024/rav4/218/1.png',
+     price: '$40,120',
+     eco: 'B',
+     details: {
+       seats: 7,
+       primaryUse: 'Daily Commute',
+       material: 'Leather',
+       drive: 'Two Wheel Drive (TWD)',
+       safety: 'Advanced Safety',
+       entertainment: 'Standard Infotainment',
+       horsepower: '245 HP',
+       mpg: '34 city / 36 highway',
+       cargo: '33.5 cu ft',
    }
+  }
  ];
 
 
